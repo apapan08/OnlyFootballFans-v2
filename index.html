@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Quiz Ball - Interactive Quiz Game</title>
+    <!-- Include Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #8dd0d6 0%, #5ba9c9 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Header Section - Scoreboard */
+        .header {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 15px 50px 15px;
+            margin-bottom: 20px;
+            position: relative;
+            background-color: rgba(78, 194, 209, 0.9);
+            border-radius: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .scoreboard {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 5px 10px;
+        }
+        
+        .player {
+            width: 100px;
+            height: 100px;
+            border-radius: 15px;
+            background-color: #fddc5c;
+            border: 3px solid #fff;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .player-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .score-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .score-box {
+            width: 80px;
+            height: 80px;
+            background-color: #3abfd7;
+            border: 3px solid #fff;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 42px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .score-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .score-btn {
+            width: 40px;
+            height: 40px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+        }
+        
+        .score-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo-center {
+            width: 100px;
+            height: 100px;
+        }
+        
+        .logo-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .score-label {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ff8c42;
+            color: white;
+            font-weight: bold;
+            padding: 8px 35px;
+            border-radius: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            font-size: 22px;
+            z-index: 10;
+        }
+
+        /* Help section styles */
+        .help-section {
+            position: fixed;
+            z-index: 10;
+            width: 210px;
+            margin-top: 30px;
+        }
+
+        .help-section.left {
+            left: 30px;
+            top: 20px;
+        }
+
+        .help-section.right {
+            right: 30px;
+            top: 20px;
+        }
+
+        .title {
+            background-color: #ff7f27;
+            color: white;
+            padding: 10px 0;
+            border-radius: 10px 10px 0 0;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .lifelines {
+            display: flex;
+            justify-content: space-around;
+            background-color: #5dc4cd;
+            padding: 15px;
+            border-radius: 0 0 15px 15px;
+        }
+
+        .lifeline {
+            position: relative;
+            margin: 0 5px;
+        }
+
+        .button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+        }
+
+        .phone {
+            background-color: #e74c3c;
+        }
+
+        .x2 {
+            background-color: #1abc9c;
+        }
+
+        .fifty {
+            background-color: #2ecc71;
+        }
+
+        .used-mark {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: red;
+            font-size: 40px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .lifeline.used .used-mark {
+            opacity: 1;
+        }
+
+        .lifeline.used .button {
+            opacity: 0.8;
+        }
+
+        .lifeline.used .phone {
+            background-color: #a93226;
+        }
+
+        .lifeline.used .x2 {
+            background-color: #117964;
+        }
+
+        .lifeline.used .fifty {
+            background-color: #1e8449;
+        }
+
+        /* Back Button */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            display: none;
+        }
+
+        /* Categories List */
+        .categories {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .category {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .category-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .category-icon {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .category-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .category-name {
+            font-size: 22px;
+            letter-spacing: 1px;
+        }
+
+        .multipliers {
+            display: flex;
+            gap: 10px;
+        }
+
+        .multiplier {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(139, 69, 19, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .multiplier:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .multiplier-used {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            color: red;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+        }
+
+        .multiplier.used .multiplier-used {
+            display: flex;
+        }
+
+        /* Category Specific Colors */
+        .cypriotic {
+            background-color: #4a76d1;
+        }
+        
+        .cypriotic .multiplier {
+            background-color: rgba(74, 118, 209, 0.3);
+        }
+
+        .top5 {
+            background-color: #30c85e;
+        }
+        
+        .top5 .multiplier {
+            background-color: rgba(48, 200, 94, 0.5);
+        }
+
+        .quess-player {
+            background-color: #8c44b2;
+        }
+        
+        .quess-player .multiplier {
+            background-color: rgba(140, 68, 178, 0.5);
+        }
+        
+        .recording {
+            background-color: #d94f84;
+        }
+        
+        .recording .multiplier {
+            background-color: rgba(217, 79, 132, 0.5);
+        }
+        
+        .gossip {
+            background-color: #f5b942;
+        }
+        
+        .gossip .multiplier {
+            background-color: rgba(245, 185, 66, 0.5);
+        }
+        
+        .photo-quiz {
+            background-color: #4aca76;
+        }
+        
+        .photo-quiz .multiplier {
+            background-color: rgba(74, 202, 118, 0.5);
+        }
+
+        .video {
+            background-color: #e67e22;
+        }
+        
+        .video .multiplier {
+            background-color: rgba(230, 126, 34, 0.5);
+        }
+
+        /* Question View Styles */
+        .question-view {
+            display: none;
+            width: 100%;
+        }
+
+        /* Flippable Card */
+        .card-container {
+            perspective: 1000px;
+            margin-top: 20px;
+            width: 100%;
+            height: 200px;
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Back card colors */
+        .cypriotic-back {
+            background-color: #2f5cc2;
+        }
+
+        .top5-back {
+            background-color: #1ea848;
+        }
+
+        .quess-player-back {
+            background-color: #6b3387;
+        }
+        
+        .recording-back {
+            background-color: #b73768;
+        }
+        
+        .gossip-back {
+            background-color: #e5a620;
+        }
+        
+        .photo-quiz-back {
+            background-color: #2d9e54;
+        }
+
+        .video-back {
+            background-color: #d35400;
+        }
+
+        /* Question Styles */
+        .question-card {
+            border-radius: 15px;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            height: 100%;
+        }
+
+        .question-icon {
+            width: 80px;
+            height: 80px;
+            min-width: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+        }
+
+        .question-text {
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            flex-grow: 1;
+            padding: 0 15px;
+        }
+
+        .question-multiplier {
+            width: 60px;
+            height: 60px;
+            min-width: 60px;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+            margin-left: 15px;
+        }
+
+        .tap-to-reveal {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        /* Question card colors */
+        .cypriotic-question {
+            background-color: #4a76d1;
+        }
+
+        .cypriotic-multiplier {
+            background-color: #2f5cc2;
+        }
+
+        .top5-question {
+            background-color: #30c85e;
+        }
+
+        .top5-multiplier {
+            background-color: #1ea848;
+        }
+
+        .quess-player-question {
+            background-color: #8c44b2;
+        }
+
+        .quess-player-multiplier {
+            background-color: #6b3387;
+        }
+        
+        .recording-question {
+            background-color: #d94f84;
+        }
+
+        .recording-multiplier {
+            background-color: #b73768;
+        }
+        
+        .gossip-question {
+            background-color: #f5b942;
+        }
+
+        .gossip-multiplier {
+            background-color: #e5a620;
+        }
+        
+        .photo-quiz-question {
+            background-color: #4aca76;
+        }
+
+        .photo-quiz-multiplier {
+            background-color: #2d9e54;
+        }
+
+        .video-question {
+            background-color: #e67e22;
+        }
+
+        .video-multiplier {
+            background-color: #d35400;
+        }
+        
+        /* TOP 5 Notepad */
+        .notepad-container {
+            margin-top: 10px;
+            width: 100%;
+            background-color: #28b653;
+            border-radius: 15px;
+            padding: 20px;
+            padding-top: 30px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .notepad-binding {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .binding-hole {
+            width: 30px;
+            height: 15px;
+            background-color: #174f29;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        
+        .notepad-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .notepad-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            background-color: rgba(0, 100, 0, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .notepad-number {
+            width: 40px;
+            height: 40px;
+            background-color: #c1f4d1;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            font-weight: bold;
+            color: #174f29;
+        }
+        
+        .notepad-answer {
+            flex-grow: 1;
+            height: 40px;
+            background-color: #c1f4d1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            color: #174f29;
+            font-weight: bold;
+            font-size: 18px;
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .notepad-answer span {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .notepad-item.revealed .notepad-answer span {
+            opacity: 1;
+        }
+
+        /* Image container for photo questions */
+        .image-container {
+            margin-top: 20px;
+            width: 100%;
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-height: 400px;
+        }
+        
+        .question-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            display: block;
+        }
+        
+        /* Audio player */
+        .audio-player-container {
+            margin-top: 20px;
+            width: 100%;
+            background-color: #f8f8f8;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
+        .audio-content {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .play-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #d94f84;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s;
+        }
+        
+        .play-button:hover {
+            transform: scale(1.05);
+            background-color: #b73768;
+        }
+        
+        .audio-title {
+            margin-left: 15px;
+        }
+        
+        .audio-title h1 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        audio {
+            display: none;
+        }
+
+        /* Video player */
+        .video-player-container {
+            margin-top: 20px;
+            width: 100%;
+            background-color: #f8f8f8;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .video-content {
+            margin-bottom: 20px;
+        }
+
+        .video-player {
+            width: 100%;
+            max-height: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-title h1 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 15px;
+        }
+
+        /* Winner Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .modal h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        
+        .winner-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .winner-icon {
+            width: 80px;
+            height: 80px;
+            background-color: #fddc5c;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 20px;
+            border: 3px solid gold;
+        }
+        
+        .winner-score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .trophy-icon {
+            color: gold;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .modal-button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .modal-button.primary {
+            background-color: #3abfd7;
+            color: white;
+        }
+        
+        .modal-button.primary:hover {
+            background-color: #2aa9b8;
+        }
+        
+        .modal-button.secondary {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .modal-button.secondary:hover {
+            background-color: #e5e5e5;
+        }
+        
+        /* Game completed indicator */
+        .game-completed {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .completion-percentage {
+            color: #3abfd7;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 1100px) {
+            .help-section {
+                width: 180px;
+            }
+            
+            .button {
+                width: 45px;
+                height: 45px;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .help-section {
+                position: static;
+                margin: 10px auto 30px;
+                width: 80%;
+                max-width: 300px;
+            }
+        }
+        
+        @media (max-width: 700px) {
+            .question-card {
+                flex-direction: column;
+                padding: 15px;
+            }
+            
+            .question-icon {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .question-text {
+                text-align: center;
+                padding: 10px 0;
+            }
+            
+            .question-multiplier {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+
+            .card-container {
+                height: 300px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .title {
+                font-size: 18px;
+            }
+            
+            .category {
+                padding: 12px 15px;
+            }
+            
+            .category-name {
+                font-size: 20px;
+            }
+            
+            .multiplier {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+            
+            .category-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .question-text {
+                font-size: 18px;
+            }
+
+            .video-player {
+                max-height: 250px;
+            }
+            
+            .video-title h1 {
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .title {
+                font-size: 16px;
+                padding: 8px 12px;
+            }
+            
+            .category {
+                padding: 10px 15px;
+            }
+            
+            .category-name {
+                font-size: 18px;
+            }
+            
+            .multiplier {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+            
+            .category-icon {
+                width: 35px;
+                height: 35px;
+            }
+        }
+
+        /* Additional Responsive Improvements */
+        
+        /* Large Screens (Projectors) */
+        @media (min-width: 1400px) {
+            .container { 
+                max-width: 1200px; 
+            }
+            .question-text { 
+                font-size: 28px; 
+            }
+            .category-name { 
+                font-size: 26px; 
+            }
+            .score-box {
+                width: 100px;
+                height: 100px;
+                font-size: 48px;
+            }
+            .player {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        /* Ultra Large Screens (1800px and up) - Large Projectors */
+        @media (min-width: 1800px) {
+            .container {
+                max-width: 1400px;
+            }
+            .question-text {
+                font-size: 32px;
+            }
+            .category {
+                padding: 20px 25px;
+            }
+            .category-name {
+                font-size: 30px;
+            }
+            .card-container {
+                height: 250px;
+            }
+        }
+
+        /* Better Font Scaling - Override existing font sizes */
+        .question-text {
+            font-size: clamp(16px, 2.5vw, 28px) !important;
+        }
+
+        .category-name {
+            font-size: clamp(16px, 2.2vw, 26px) !important;
+        }
+
+        /* Enhanced Video Responsiveness */
+        .video-player {
+            max-height: min(400px, 50vh);
+            aspect-ratio: 16/9;
+        }
+
+        /* Better touch targets for mobile */
+        @media (max-width: 768px) {
+            .multiplier, .score-btn, .button {
+                min-width: 44px;
+                min-height: 44px;
+            }
+            
+            .card:active {
+                transform: scale(0.98);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Help Sections -->
+    <div class="help-section left">
+        <div class="title">ΒΟΗΘΕΙΕΣ</div>
+        <div class="lifelines">
+            <div class="lifeline" id="player1-phone">
+                <div class="used-mark">X</div>
+                <div class="button phone" onclick="useHelp('player1-phone')">
+                    <i class="fas fa-phone"></i>
+                </div>
+            </div>
+            
+            <div class="lifeline" id="player1-double">
+                <div class="used-mark">X</div>
+                <div class="button x2" onclick="useHelp('player1-double')">
+                    X2
+                </div>
+            </div>
+            
+            <div class="lifeline" id="player1-fifty">
+                <div class="used-mark">X</div>
+                <div class="button fifty" onclick="useHelp('player1-fifty')">
+                    50/50
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="help-section right">
+        <div class="title">ΒΟΗΘΕΙΕΣ</div>
+        <div class="lifelines">
+            <div class="lifeline" id="player2-phone">
+                <div class="used-mark">X</div>
+                <div class="button phone" onclick="useHelp('player2-phone')">
+                    <i class="fas fa-phone"></i>
+                </div>
+            </div>
+            
+            <div class="lifeline" id="player2-double">
+                <div class="used-mark">X</div>
+                <div class="button x2" onclick="useHelp('player2-double')">
+                    X2
+                </div>
+            </div>
+            
+            <div class="lifeline" id="player2-fifty">
+                <div class="used-mark">X</div>
+                <div class="button fifty" onclick="useHelp('player2-fifty')">
+                    50/50
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <button class="back-button" id="backButton">
+        <i class="fas fa-arrow-left" style="color: #5ba9c9;"></i>
+    </button>
+
+    <!-- Game completion indicator -->
+    <div class="game-completed">
+        Completed: <span class="completion-percentage" id="completionPercentage">0%</span>
+    </div>
+
+    <div class="container">
+        <!-- Header Section - Scoreboard -->
+        <header class="header">
+            <div class="scoreboard">
+                <!-- Player 1 -->
+                <div class="player">
+                    <img src="images/Player1.png" alt="Player 1" class="player-img">
+                </div>
+                
+                <!-- Score for Player 1 -->
+                <div class="score-container">
+                    <div class="score-controls">
+                        <button class="score-btn" onclick="updateScore('player1', 0.5)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="score-btn" onclick="updateScore('player1', -0.5)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                    <div class="score-box" id="player1-score">0</div>
+                </div>
+                
+                <!-- Center Logo -->
+                <div class="logo-center">
+                    <img src="images/logo.png" alt="Logo" class="logo-image">
+                </div>
+                
+                <!-- Score for Player 2 -->
+                <div class="score-container">
+                    <div class="score-box" id="player2-score">0</div>
+                    <div class="score-controls">
+                        <button class="score-btn" onclick="updateScore('player2', 0.5)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="score-btn" onclick="updateScore('player2', -0.5)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Player 2 -->
+                <div class="player">
+                    <img src="images/Player122.png" alt="Player 2" class="player-img">
+                </div>
+            </div>
+            
+            <div class="score-label">SCORE</div>
+        </header>
+
+        <!-- Categories List -->
+        <div class="categories" id="categoriesView">
+            <!-- Category 1: ΚΥΠΡΙΑΚΟ -->
+            <div class="category cypriotic" data-category="cypriotic">
+                <div class="category-left">
+                    <div class="category-icon">
+                        <i class="fas fa-trophy" style="color: white; font-size: 24px;"></i>
+                    </div>
+                    <div class="category-name">ΚΥΠΡΙΑΚΟ</div>
+                </div>
+                <div class="multipliers">
+                    <div class="multiplier" data-value="x1" data-category="cypriotic">
+                        x1
+                        <div class="multiplier-used">X</div>
+                    </div>
+                    <div class="multiplier" data-value="x2" data-category="cypriotic">
+                        x2
+                        <div class="multiplier-used">X</div>
+                    </div>
+                    <div class="multiplier" data-value="x3" data-category="cypriotic">
+                        x3
+                        <div class="multiplier-used">X</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 2: TOP 5 -->
+            <div class="category top5" data-category="top5">
+                <div class="category-left">
+                    <div class="category-icon">
+                        <i class="fas fa-list-ol" style="color: white; font-size: 24px;"></i>
+                    </div>
+                    <div class="category-name">TOP 5</div>
+                </div>
+                <div class="multipliers">
+                    <div class="multiplier" data-value="x2" data-category="top5">
+                        x2
+                        <div class="multiplier-used">X</div>
+                    </div>
+                    <div class="multiplier" data-value="x2" data-category="top5">
+                        x2
+                        <div class="multiplier-used">X</div>
+                    </div>
+                    <div class="multiplier" data-value="x3" data-category="top5">
+                        x3
+                        <div class="multiplier-used">X</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 3: QUESS THE PLAYER -->
+            <div class="category quess-player" data-category="quess-player">
+                <div class="category-left">
+                    <div class="category-icon">
+                        <i class="fas fa-user" style="color: white; font-size: 24px;"></i>
+                    </div>
+                    <div class="category-name">QUESS THE PLAYER</div>
+                </div>
+                <div class="multipliers">
+                    <div class="multiplier" data-value="x1" data-category="quess-player">
+                        x1
+                        <div class="multiplier-used">X</div>
+                    </div>
+                    <div class="multiplier" data-value="x2" data-category="quess-player">
+                        x2
+                        <div class="multiplier-used">X</div>
+                    </div>
+                    <div class="multiplier" data-value="x3" data-category="quess-player">
+                        x3
+                        <div class="multiplier-used">X</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 4: RECORDING -->
+            <div class="category recording" data-category="recording">
+                <div class="category-left">
+                    <div class="category-icon">
+                        <i class="fas fa-microphone" style="color: white; font-size: 24px;"></i>
+                    </div>
+                    <div class="category-name">RECORDING</div>
+                </div>
+                <div class="multipliers">
+                    <div class="multiplier" data-value="x1" data-category="recording">
+                        x1
+                        <div class="multiplier-used">X</div>
+                    </div>
+                    <div class="multiplier" data-value="x2" data-category="recording">
+                        x2
+                        <div class="multiplier-used">X</div>
+                    </div>
+                    <div class="multiplier" data-value="x3" data-category="recording">
+                        x3
+                        <div class="multiplier-used">X</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Category 5: GOSSIP -->
+            <div class="category gossip" data-category="gossip">
+                <div class="category-left">
+                    <div class="category-icon">
+                        <i class="fas fa-comment-dots" style="color: white; font-size: 24px;"></i>
+                    </div>
+                    <div class="category-name">GOSSIP</div>
+                </div>
+                <div class="multipliers">
+                    <div class="multiplier" data-value="x2" data-category="gossip">
+                        x2
+                        <div class="multiplier-used">X</div>
+                    </div>
+                    <div class="multiplier" data-value="x2" data-category="gossip">
+                        x2
+                        <div class="multiplier-used">X</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Category 6: PHOTO QUIZ -->
+            <div class="category photo-quiz" data-category="photo-quiz">
+                <div class="category-left">
+                    <div class="category-icon">
+                        <i class="fas fa-camera" style="color: white; font-size: 24px;"></i>
+                    </div>
+                    <div class="category-name">PHOTO QUIZ</div>
+                </div>
+                <div class="multipliers">
+                    <div class="multiplier" data-value="x1" data-category="photo-quiz">
+                        x1
+                        <div class="multiplier-used">X</div>
+                    </div>
+                    <div class="multiplier" data-value="x1" data-category="photo-quiz">
+                        x1
+                        <div class="multiplier-used">X</div>
+                    </div>
+                    <div class="multiplier" data-value="x2" data-category="photo-quiz">
+                        x2
+                        <div class="multiplier-used">X</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 7: VIDEO -->
+            <div class="category video" data-category="video">
+                <div class="category-left">
+                    <div class="category-icon">
+                        <i class="fas fa-video" style="color: white; font-size: 24px;"></i>
+                    </div>
+                    <div class="category-name">VIDEO</div>
+                </div>
+                <div class="multipliers">
+                    <div class="multiplier" data-value="x1" data-category="video">
+                        x1
+                        <div class="multiplier-used">X</div>
+                    </div>
+                    <div class="multiplier" data-value="x2" data-category="video">
+                        x2
+                        <div class="multiplier-used">X</div>
+                    </div>
+                    <div class="multiplier" data-value="x3" data-category="video">
+                        x3
+                        <div class="multiplier-used">X</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question View -->
+        <div class="question-view" id="questionView">
+            <!-- Flippable Card -->
+            <div class="card-container">
+                <div class="card" id="questionCard">
+                    <!-- Front of Card (Question) - Cypriotic Template -->
+                    <div class="card-front" id="cyprioticCard">
+                        <div class="question-card cypriotic-question">
+                            <div class="question-icon">
+                                <i class="fas fa-trophy" style="color: white; font-size: 36px;"></i>
+                            </div>
+                            <div class="question-text">
+                                Ποια είναι η δεύτερη ομάδα με τους περισσότερους πρώτους σκόρερ του κυπριακού πρωταθλήματος;
+                            </div>
+                            <div class="question-multiplier cypriotic-multiplier" id="cyprioticMultiplier">
+                                x1
+                            </div>
+                            <div class="tap-to-reveal">Tap to reveal answer</div>
+                        </div>
+                    </div>
+
+                    <!-- Front of Card (Question) - Top 5 Template -->
+                    <div class="card-front" id="top5Card" style="display: none;">
+                        <div class="question-card top5-question">
+                            <div class="question-icon">
+                                <i class="fas fa-list-ol" style="color: white; font-size: 36px;"></i>
+                            </div>
+                            <div class="question-text">
+                                Players with most appearances with Kaka
+                            </div>
+                            <div class="question-multiplier top5-multiplier" id="top5Multiplier">
+                                x2
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Front of Card (Question) - Quess Player Template -->
+                    <div class="card-front" id="quessPlayerCard" style="display: none;">
+                        <div class="question-card quess-player-question">
+                            <div class="question-icon">
+                                <i class="fas fa-user" style="color: white; font-size: 36px;"></i>
+                            </div>
+                            <div class="question-text">
+                                Ποιος είναι ποδοσφαιριστής με τα πιο κάτω στατιστικά;
+                            </div>
+                            <div class="question-multiplier quess-player-multiplier" id="quessPlayerMultiplier">
+                                x1
+                            </div>
+                            <div class="tap-to-reveal">Tap to reveal answer</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Front of Card (Question) - Recording Template -->
+                    <div class="card-front" id="recordingCard" style="display: none;">
+                        <div class="question-card recording-question">
+                            <div class="question-icon">
+                                <i class="fas fa-microphone" style="color: white; font-size: 36px;"></i>
+                            </div>
+                            <div class="question-text">
+                                Ποιος δίνει την συνέντευξη που θα ακούσεις;
+                            </div>
+                            <div class="question-multiplier recording-multiplier" id="recordingMultiplier">
+                                x1
+                            </div>
+                            <div class="tap-to-reveal">Tap to reveal answer</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Front of Card (Question) - Gossip Template -->
+                    <div class="card-front" id="gossipCard" style="display: none;">
+                        <div class="question-card gossip-question">
+                            <div class="question-icon">
+                                <i class="fas fa-comment-dots" style="color: white; font-size: 36px;"></i>
+                            </div>
+                            <div class="question-text">
+                                Ποιος ποδοσφαιριστής tweetare "just to confirm to all my followers I have had a hair transplant";
+                            </div>
+                            <div class="question-multiplier gossip-multiplier" id="gossipMultiplier">
+                                x2
+                            </div>
+                            <div class="tap-to-reveal">Tap to reveal answer</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Front of Card (Question) - Photo Quiz Template -->
+                    <div class="card-front" id="photoQuizCard" style="display: none;">
+                        <div class="question-card photo-quiz-question">
+                            <div class="question-icon">
+                                <i class="fas fa-camera" style="color: white; font-size: 36px;"></i>
+                            </div>
+                            <div class="question-text">
+                                <!-- Question text will be populated by JavaScript -->
+                            </div>
+                            <div class="question-multiplier photo-quiz-multiplier" id="photoQuizMultiplier">
+                                x1
+                            </div>
+                            <div class="tap-to-reveal">Tap to reveal answer</div>
+                        </div>
+                    </div>
+
+                    <!-- Front of Card (Question) - Video Template -->
+                    <div class="card-front" id="videoCard" style="display: none;">
+                        <div class="question-card video-question">
+                            <div class="question-icon">
+                                <i class="fas fa-video" style="color: white; font-size: 36px;"></i>
+                            </div>
+                            <div class="question-text">
+                                Ποιος παίκτης σκοράρει στο βίντεο που θα δεις;
+                            </div>
+                            <div class="question-multiplier video-multiplier" id="videoMultiplier">
+                                x1
+                            </div>
+                            <div class="tap-to-reveal">Tap to reveal answer</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Back of Card (Answer) - Will be dynamically assigned a class -->
+                    <div class="card-back" id="answerCard">
+                        <!-- Answer will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- TOP 5 Notepad (only shown for TOP 5 category) -->
+            <div class="notepad-container" id="notepadContainer" style="display: none;">
+                <div class="notepad-binding">
+                    <div class="binding-hole"></div>
+                    <div class="binding-hole"></div>
+                    <div class="binding-hole"></div>
+                    <div class="binding-hole"></div>
+                    <div class="binding-hole"></div>
+                </div>
+                <div class="notepad-list">
+                    <div class="notepad-item" data-index="0">
+                        <div class="notepad-number">1</div>
+                        <div class="notepad-answer"><span></span></div>
+                    </div>
+                    <div class="notepad-item" data-index="1">
+                        <div class="notepad-number">2</div>
+                        <div class="notepad-answer"><span></span></div>
+                    </div>
+                    <div class="notepad-item" data-index="2">
+                        <div class="notepad-number">3</div>
+                        <div class="notepad-answer"><span></span></div>
+                    </div>
+                    <div class="notepad-item" data-index="3">
+                        <div class="notepad-number">4</div>
+                        <div class="notepad-answer"><span></span></div>
+                    </div>
+                    <div class="notepad-item" data-index="4">
+                        <div class="notepad-number">5</div>
+                        <div class="notepad-answer"><span></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image container for photo questions -->
+            <div class="image-container" id="imageContainer" style="display: none;">
+                <img id="questionImage" class="question-image" src="" alt="Question Image">
+            </div>
+            
+            <!-- Audio Player for Recording category -->
+            <div class="audio-player-container" id="audioPlayerContainer" style="display: none;">
+                <div class="audio-content">
+                    <button class="play-button" id="audioPlayerButton">
+                        <i class="fas fa-play" id="playIcon"></i>
+                        <i class="fas fa-pause" id="pauseIcon" style="display: none;"></i>
+                    </button>
+                    <div class="audio-title">
+                        <h1>Άκουσε την ηχογράφηση και απάντησε την ερώτηση</h1>
+                    </div>
+                </div>
+                
+                <audio id="audioElement" preload="metadata"></audio>
+            </div>
+
+            <!-- Video Player for Video category -->
+            <div class="video-player-container" id="videoPlayerContainer" style="display: none;">
+                <div class="video-content">
+                    <video id="videoElement" class="video-player" controls preload="metadata">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="video-title">
+                    <h1>Παρακολούθησε το βίντεο και απάντησε την ερώτηση</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Winner Modal -->
+    <div class="modal-overlay" id="winnerModal">
+        <div class="modal">
+            <i class="fas fa-trophy trophy-icon"></i>
+            <h2>Τέλος Παιχνιδιού!</h2>
+            <div id="winnerMessage">Νικητής είναι ο Παίκτης 1!</div>
+            <div class="winner-info">
+                <div class="winner-icon">
+                    <i class="fas fa-user" style="font-size: 36px; color: #333;"></i>
+                </div>
+                <div class="winner-score">Σκορ: <span id="finalScore">12</span></div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-button primary" id="newGameBtn">Νέο Παιχνίδι</button>
+                <button class="modal-button secondary" id="closeModalBtn">Κλείσιμο</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Help button functionality
+        function useHelp(helpId) {
+            const lifeline = document.getElementById(helpId);
+            if (lifeline && !lifeline.classList.contains('used')) {
+                lifeline.classList.add('used');
+            }
+        }
+        
+        // Quiz data structure
+        const quizData = {
+            "cypriotic": {
+                "x1": {
+                    question: "Ποιος ήταν ο τερματοφύλακας του ΑΠΟΕΛ στον ιστορικό αγώνα Athletic Bilbao – ΑΠΟΕΛ που έληξε 3-2 υπέρ της ισπανικής ομάδας;",
+                    answer: "Waterman"
+                },
+                "x2": {
+                    question: "Ποια είναι η ομάδα με τις περισσότερες ήττες συνολικα τα τελευταία 5 χρόνια στο Κυπριακό πρωτάθλημα;",
+                    answer: "Καρμιώτισσα (79)"
+                },
+                "x3": {
+                    question: "Ποια κυπριακή ομάδα κατέχει το απόλυτο ρεκόρ αήττητου σερί στο πρωτάθλημα Α΄ Κατηγορίας και με πόσα συνεχόμενα παιχνίδια έμεινε αήττητη;",
+                    answer: "Ομόνοια – 46 αγώνες"
+                }
+            },
+            "top5": {
+                "x2": [
+                    {
+                        question: "Πολυτιμότεροι παίκτες (Transfermarkt) ηλικίας ≥ 34 ετών",
+                        answers: [
+                            "1. Antoine Griezmann (€22 m)",
+                            "2. Lionel Messi (€18 m)",
+                            "3. Robert Lewandowski (€15 m)",
+                            "4. Cristiano Ronaldo (€12 m)",
+                            "5. Riyad Mahrez (€8 m)"
+                        ]
+                    },
+                    {
+                        question: "Τερματοφύλακες με τα περισσότερα clean sheets φέτος (Top-5 leagues)",
+                        answers: [
+                            "1. Alex Meret – Napoli (17)",
+                            "2. Mile Svilar – Roma (16)",
+                            "3. Jan Oblak – Atlético Madrid (15)",
+                            "4. Michele Di Gregorio – Juventus (14)",
+                            "5. Péter Gulácsi – RB Leipzig (14)"
+                        ]
+                    }
+                ],
+                "x3": {
+                    question: "Πιο ακριβές αγορές της West Ham",
+                    answers: [
+                        "1. Sébastien Haller (Frankfurt – €50 m)",
+                        "2. Maximilian Kilman (Wolves – €47.5 m)",
+                        "3. Mohammed Kudus (Ajax – €43 m)",
+                        "4. Lucas Paquetá (Lyon – €42.95 m)",
+                        "5. Jean-Clair Todibo (Nice – €42 m)"
+                    ]
+                }
+            },
+            "quess-player": {
+                "x1": {
+                    question: "Ποιος είναι ο ποδοσφαιριστής με τα ακόλουθα στατιστικά;",
+                    answer: "Marc Cucurella",
+                    imageUrl: "images/QuessThePlayer1.png"
+                },
+                "x2": {
+                    question: "Ποιος λείπει από την ενδεκάδα του τελικού Euro 2016 μεταξύ Πορτογαλίας και Γαλλίας;",
+                    answer: "José Fonte",
+                    imageUrl: "images/QuessThePlayer2.png"
+                },
+                "x3": {
+                    question: "Ποιος είναι ο ποδοσφαιριστής με τα ακόλουθα στατιστικά;",
+                    answer: "Martin Demichelis",
+                    imageUrl: "images/QuessThePlayer3.png"
+                }
+            },
+            "recording": {
+                "x1": {
+                    question: "Ποιας ομάδας προπονητής είναι ο τεχνικός που ακούγεται στη συνέντευξη;",
+                    answer: "ΟΦΗ",
+                    audioUrl: "Audio/Recording1.mp3"
+                },
+                "x2": {
+                    question: "Πότε δόθηκε η post-match συνέντευξη που θα ακούσεις και ποιες ομάδες αγωνίζονταν;",
+                    answer: "2018 – Manchester United vs Tottenham",
+                    audioUrl: "Audio/Recording2.mp3"
+                },
+                "x3": {
+                    question: "Σε ποιο πρωτάθλημα αγωνιζόταν ο ποδοσφαιριστής που δίνει τη συνέντευξη;",
+                    answer: "South African Premier Division",
+                    audioUrl: "Audio/Recording3.mp3"
+                }
+            },
+            "gossip": {
+                "x1": {
+                    question: "Ποιος ποδοσφαιριστής άναψε πυροτεχνήματα στο μπάνιο του, προκαλώντας φωτιά στο σπίτι του;",
+                    answer: "Mario Balotelli"
+                },
+                "x2": [
+                    {
+                        question: "Ποιος ποδοσφαιριστής προκάλεσε χαμό στο Instagram ανεβάζοντας βίντεο να τρώει «χρυσή μπριζόλα» 24 καρατίων, με αποτέλεσμα να δεχθεί πρόστιμο από την ομάδα του;",
+                        answer: "Franck Ribéry"
+                    },
+                    {
+                        question: "Ποιος Άγγλος ποδοσφαιριστής έγινε πρωτοσέλιδο το 2011 όταν, παίζοντας με αεροβόλο στο προπονητικό, τραυμάτισε κατά λάθος νεαρό φοιτητή σε πρακτική;",
+                        answer: "Ashley Cole"
+                    }
+                ]
+            },
+            "photo-quiz": {
+                "x1": [
+                    {
+                        question: "Ποιος πανηγυρίζει στη φωτογραφία;",
+                        answer: "Andrés Iniesta",
+                        imageUrl: "images/PhotoQuiz1.png"
+                    },
+                    {
+                        question: "Ποιον αγώνα παρακολουθεί ο πιο κάτω κύριος;",
+                        answer: "Switzerland vs France",
+                        imageUrl: "images/PhotoQuiz2.png"
+                    }
+                ],
+                "x2": {
+                    question: "Ποια ποδοσφαιρική ομάδα - και σε ποιο γήπεδο - είδε τους οπαδούς της, σε παιχνίδι του Φεβρουαρίου 2023, να σταματούν τον αγώνα ακριβώς στις 04:17 και να πετούν χιλιάδες λούτρινα αρκουδάκια στον αγωνιστικό χώρο;",
+                    answer: "Besiktas - Vodafone Park",
+                    imageUrl: "images/PhotoQuiz3.png"
+                }
+            },
+            "video": {
+                "x1": {
+                    question: "Ποιός σκόραρε το νικητήριο γκολ του πιο κάτω αγώνα;",
+                    answer: "Alisson Becker",
+                    videoUrl: "Videos/Video1.mp4"
+                },
+                "x2": {
+                    question: "Ποια χρονιά σημειώθηκε το γκολ που βλέπεις;",
+                    answer: "1997",
+                    videoUrl: "Videos/Video2.mp4"
+                },
+                "x3": {
+                    question: "Υπάρχει μονο 1 ομαδα εκτός Ισπανίας και Ιταλίας, στην οποία έχουν αγωνιστεί δύο από τους παίκτες που αγγίζουν την μπάλα στο βίντεο. Μπορείτε να ονομάσετε αυτή την ομάδα και τους δύο παίκτες;",
+                    answer: "Ronaldo, Roberto Carlos - Corinthians",
+                    videoUrl: "Videos/Video3.mp4"
+                }
+            }
+        };
+
+        // Total number of questions in the game
+        const totalQuestions = (function() {
+            let count = 0;
+            for (const category in quizData) {
+                for (const multiplier in quizData[category]) {
+                    if (Array.isArray(quizData[category][multiplier])) {
+                        count += quizData[category][multiplier].length;
+                    } else {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        })();
+
+        // Keep track of used questions
+        let questionsUsed = 0;
+        
+        // DOM Elements
+        const categoriesView = document.getElementById('categoriesView');
+        const questionView = document.getElementById('questionView');
+        const backButton = document.getElementById('backButton');
+        const questionCard = document.getElementById('questionCard');
+        const multipliers = document.querySelectorAll('.multiplier');
+        const cyprioticCard = document.getElementById('cyprioticCard');
+        const top5Card = document.getElementById('top5Card');
+        const quessPlayerCard = document.getElementById('quessPlayerCard');
+        const recordingCard = document.getElementById('recordingCard');
+        const gossipCard = document.getElementById('gossipCard');
+        const photoQuizCard = document.getElementById('photoQuizCard');
+        const videoCard = document.getElementById('videoCard');
+        const answerCard = document.getElementById('answerCard');
+        const notepadContainer = document.getElementById('notepadContainer');
+        const notepadItems = document.querySelectorAll('.notepad-item');
+        const imageContainer = document.getElementById('imageContainer');
+        const questionImage = document.getElementById('questionImage');
+        const audioPlayerContainer = document.getElementById('audioPlayerContainer');
+        const audioElement = document.getElementById('audioElement');
+        const audioPlayerButton = document.getElementById('audioPlayerButton');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+        const videoPlayerContainer = document.getElementById('videoPlayerContainer');
+        const videoElement = document.getElementById('videoElement');
+        const completionPercentage = document.getElementById('completionPercentage');
+        
+        // Winner Modal Elements
+        const winnerModal = document.getElementById('winnerModal');
+        const winnerMessage = document.getElementById('winnerMessage');
+        const finalScore = document.getElementById('finalScore');
+        const newGameBtn = document.getElementById('newGameBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        
+        // Counters for multiple choice questions in same category/multiplier
+        const counters = {
+            "top5": { "x2": 0 },
+            "gossip": { "x2": 0 },
+            "photo-quiz": { "x1": 0 }
+        };
+
+        // Event Listeners for multipliers
+        multipliers.forEach(multiplier => {
+            multiplier.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                const categoryType = this.getAttribute('data-category');
+                const value = this.getAttribute('data-value');
+                
+                // Skip if already used
+                if (this.classList.contains('used')) {
+                    return;
+                }
+                
+                // Mark this multiplier as used
+                this.classList.add('used');
+                questionsUsed++;
+                
+                // Update completion percentage
+                updateCompletionPercentage();
+                
+                // Show the question view
+                categoriesView.style.display = 'none';
+                questionView.style.display = 'block';
+                backButton.style.display = 'flex';
+                
+                // Reset state
+                resetQuestionState();
+                
+                // Show the appropriate card based on category
+                showCategoryCard(categoryType, value);
+                
+                // Check if game is complete
+                checkGameCompletion();
+            });
+        });
+
+        // Update completion percentage
+        function updateCompletionPercentage() {
+            const percentage = Math.round((questionsUsed / totalQuestions) * 100);
+            completionPercentage.textContent = `${percentage}%`;
+        }
+        
+        // Check if the game is complete
+        function checkGameCompletion() {
+            if (questionsUsed >= totalQuestions) {
+                // Determine winner
+                const player1Score = parseFloat(document.getElementById('player1-score').textContent);
+                const player2Score = parseFloat(document.getElementById('player2-score').textContent);
+                
+                if (player1Score > player2Score) {
+                    winnerMessage.textContent = 'Νικητής είναι ο Παίκτης 1!';
+                    finalScore.textContent = player1Score;
+                } else if (player2Score > player1Score) {
+                    winnerMessage.textContent = 'Νικητής είναι ο Παίκτης 2!';
+                    finalScore.textContent = player2Score;
+                } else {
+                    winnerMessage.textContent = 'Ισοπαλία!';
+                    finalScore.textContent = player1Score;
+                }
+                
+                // Show winner modal
+                setTimeout(() => {
+                    winnerModal.style.display = 'flex';
+                }, 1000);
+            }
+        }
+
+        // Reset the state of question cards and notepad
+        function resetQuestionState() {
+            // Reset card flip state
+            questionCard.classList.remove('flipped');
+            
+            // Reset notepad items to not revealed
+            notepadItems.forEach(item => {
+                item.classList.remove('revealed');
+                const span = item.querySelector('.notepad-answer span');
+                span.textContent = '';
+            });
+            
+            // Hide all question content containers
+            notepadContainer.style.display = 'none';
+            imageContainer.style.display = 'none';
+            audioPlayerContainer.style.display = 'none';
+            videoPlayerContainer.style.display = 'none';
+            
+            // Reset audio
+            if (audioElement) {
+                audioElement.pause();
+                audioElement.currentTime = 0;
+                if (playIcon && pauseIcon) {
+                    playIcon.style.display = 'block';
+                    pauseIcon.style.display = 'none';
+                }
+            }
+            
+            // Reset video
+            if (videoElement) {
+                videoElement.pause();
+                videoElement.currentTime = 0;
+            }
+        }
+
+        // Show the appropriate category card
+        function showCategoryCard(categoryType, value) {
+            // Hide all card fronts
+            cyprioticCard.style.display = 'none';
+            top5Card.style.display = 'none';
+            quessPlayerCard.style.display = 'none';
+            recordingCard.style.display = 'none';
+            gossipCard.style.display = 'none';
+            photoQuizCard.style.display = 'none';
+            videoCard.style.display = 'none';
+            
+            // Get current counter value for categories with multiple questions per multiplier
+            let questionData;
+            
+            if (categoryType === 'top5' && value === 'x2') {
+                // Get the current top5 question based on counter
+                questionData = quizData[categoryType][value][counters[categoryType][value]];
+                // Increment counter for next time
+                counters[categoryType][value] = (counters[categoryType][value] + 1) % quizData[categoryType][value].length;
+            } else if (categoryType === 'gossip' && value === 'x2') {
+                // Get the current gossip question based on counter
+                questionData = quizData[categoryType][value][counters[categoryType][value]];
+                // Increment counter for next time
+                counters[categoryType][value] = (counters[categoryType][value] + 1) % quizData[categoryType][value].length;
+            } else if (categoryType === 'photo-quiz' && value === 'x1') {
+                // Get the current photo-quiz question based on counter
+                questionData = quizData[categoryType][value][counters[categoryType][value]];
+                // Increment counter for next time
+                counters[categoryType][value] = (counters[categoryType][value] + 1) % quizData[categoryType][value].length;
+            } else {
+                // Get question and answer from data
+                questionData = quizData[categoryType][value];
+            }
+            
+            // Set the appropriate card type and content
+            if (categoryType === 'cypriotic') {
+                cyprioticCard.style.display = 'block';
+                cyprioticCard.querySelector('.question-text').textContent = questionData.question;
+                document.getElementById('cyprioticMultiplier').textContent = value;
+                answerCard.textContent = questionData.answer;
+                answerCard.className = 'card-back cypriotic-back';
+            } 
+            else if (categoryType === 'top5') {
+                top5Card.style.display = 'block';
+                top5Card.querySelector('.question-text').textContent = questionData.question;
+                document.getElementById('top5Multiplier').textContent = value;
+                
+                // Show the notepad for top5 category
+                notepadContainer.style.display = 'block';
+                
+                // Set the answers in the notepad items
+                notepadItems.forEach((item, index) => {
+                    const span = item.querySelector('.notepad-answer span');
+                    span.textContent = questionData.answers[index];
+                });
+            }
+            else if (categoryType === 'quess-player') {
+                quessPlayerCard.style.display = 'block';
+                quessPlayerCard.querySelector('.question-text').textContent = questionData.question;
+                document.getElementById('quessPlayerMultiplier').textContent = value;
+                answerCard.textContent = questionData.answer;
+                answerCard.className = 'card-back quess-player-back';
+                
+                // Show the image
+                imageContainer.style.display = 'block';
+                questionImage.src = questionData.imageUrl;
+            }
+            else if (categoryType === 'recording') {
+                recordingCard.style.display = 'block';
+                recordingCard.querySelector('.question-text').textContent = questionData.question;
+                document.getElementById('recordingMultiplier').textContent = value;
+                answerCard.textContent = questionData.answer;
+                answerCard.className = 'card-back recording-back';
+                
+                // Show audio player
+                audioPlayerContainer.style.display = 'block';
+                
+                // Set up audio player
+                setupAudioPlayer(questionData);
+            }
+            else if (categoryType === 'gossip') {
+                gossipCard.style.display = 'block';
+                gossipCard.querySelector('.question-text').textContent = questionData.question;
+                document.getElementById('gossipMultiplier').textContent = value;
+                answerCard.textContent = questionData.answer;
+                answerCard.className = 'card-back gossip-back';
+            }
+            else if (categoryType === 'photo-quiz') {
+                photoQuizCard.style.display = 'block';
+                
+                if (value === 'x1') {
+                    // Handle multiple x1 questions with counter
+                    questionData = quizData[categoryType][value][counters[categoryType][value]];
+                } else {
+                    // Handle single x2 question
+                    questionData = quizData[categoryType][value];
+                }
+                
+                photoQuizCard.querySelector('.question-text').textContent = questionData.question;
+                document.getElementById('photoQuizMultiplier').textContent = value;
+                answerCard.textContent = questionData.answer;
+                answerCard.className = 'card-back photo-quiz-back';
+                
+                // Show the image
+                imageContainer.style.display = 'block';
+                questionImage.src = questionData.imageUrl;
+            }
+            else if (categoryType === 'video') {
+                videoCard.style.display = 'block';
+                videoCard.querySelector('.question-text').textContent = questionData.question;
+                document.getElementById('videoMultiplier').textContent = value;
+                answerCard.textContent = questionData.answer;
+                answerCard.className = 'card-back video-back';
+                
+                // Show video player
+                videoPlayerContainer.style.display = 'block';
+                
+                // Set up video player
+                setupVideoPlayer(questionData);
+            }
+        }
+        
+        // Set up the audio player
+        function setupAudioPlayer(data) {
+            // Set audio source
+            audioElement.src = data.audioUrl;
+            
+            // Reset player state
+            audioElement.pause();
+            audioElement.currentTime = 0;
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+            
+            // Setup audio event listeners
+            audioElement.addEventListener('ended', function() {
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+            });
+            
+            // Play/Pause button click event
+            audioPlayerButton.onclick = function() {
+                toggleAudio();
+            };
+        }
+
+        // Set up the video player
+        function setupVideoPlayer(data) {
+            // Set video source
+            videoElement.src = data.videoUrl;
+            
+            // Reset player state
+            videoElement.pause();
+            videoElement.currentTime = 0;
+            
+            // Optional: Add custom event listeners
+            videoElement.addEventListener('loadedmetadata', function() {
+                console.log('Video loaded and ready to play');
+            });
+            
+            videoElement.addEventListener('ended', function() {
+                console.log('Video playback ended');
+            });
+        }
+        
+        // Toggle audio playback
+        function toggleAudio() {
+            if (audioElement.paused) {
+                audioElement.play();
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+            } else {
+                audioElement.pause();
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+            }
+        }
+        
+        // Update score function
+        function updateScore(player, amount) {
+            const scoreElement = document.getElementById(`${player}-score`);
+            let currentScore = parseFloat(scoreElement.textContent);
+            currentScore += amount;
+            
+            // Ensure score is never negative
+            if (currentScore < 0) currentScore = 0;
+            
+            // Format the score to show as integer if whole number, or 1 decimal place if not
+            scoreElement.textContent = Number.isInteger(currentScore) ? 
+                currentScore.toString() : 
+                currentScore.toFixed(1);
+        }
+
+        // Card flip functionality
+        questionCard.addEventListener('click', function() {
+            // Only flip if not TOP 5 category (which has its own reveal mechanism)
+            if (top5Card.style.display !== 'block') {
+                this.classList.toggle('flipped');
+            }
+        });
+
+        // Notepad item click functionality
+        notepadItems.forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.add('revealed');
+            });
+        });
+
+        // Back button functionality
+        backButton.addEventListener('click', function() {
+            // Stop audio if it's playing
+            if (audioElement) {
+                audioElement.pause();
+                audioElement.currentTime = 0;
+                if (playIcon && pauseIcon) {
+                    playIcon.style.display = 'block';
+                    pauseIcon.style.display = 'none';
+                }
+            }
+            
+            // Stop video if it's playing
+            if (videoElement) {
+                videoElement.pause();
+                videoElement.currentTime = 0;
+            }
+            
+            // Hide question view, show categories
+            questionView.style.display = 'none';
+            categoriesView.style.display = 'flex';
+            backButton.style.display = 'none';
+        });
+        
+        // Modal buttons functionality
+        newGameBtn.addEventListener('click', function() {
+            // Reset game
+            resetGame();
+            winnerModal.style.display = 'none';
+        });
+        
+        closeModalBtn.addEventListener('click', function() {
+            winnerModal.style.display = 'none';
+        });
+        
+        // Reset the game for a new round
+        function resetGame() {
+            // Reset scores
+            document.getElementById('player1-score').textContent = '0';
+            document.getElementById('player2-score').textContent = '0';
+            
+            // Reset multipliers
+            multipliers.forEach(multiplier => {
+                multiplier.classList.remove('used');
+            });
+            
+            // Reset lifelines
+            document.querySelectorAll('.lifeline').forEach(lifeline => {
+                lifeline.classList.remove('used');
+            });
+            
+            // Reset counters
+            for (const category in counters) {
+                for (const multiplier in counters[category]) {
+                    counters[category][multiplier] = 0;
+                }
+            }
+            
+            // Reset questions used
+            questionsUsed = 0;
+            updateCompletionPercentage();
+            
+            // Show categories view
+            questionView.style.display = 'none';
+            categoriesView.style.display = 'flex';
+            backButton.style.display = 'none';
+        }
+        
+        // Initialize the game
+        function initGame() {
+            // Initialize completion percentage
+            updateCompletionPercentage();
+            
+            // Hide winner modal
+            winnerModal.style.display = 'none';
+        }
+        
+        // Start the game
+        initGame();
+    </script>
+</body>
+</html>
