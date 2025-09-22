@@ -458,6 +458,19 @@
     </div>
 
     <script>
+
+        // Update score by 0.5 steps (no float glitches)
+function updateScore(player, delta) {
+  const el = document.getElementById(`${player}-score`);
+  let current = parseFloat(el.textContent) || 0;
+
+  // Work in half-points to avoid 0.3000000004 issues
+  let halves = Math.round(current * 2) + Math.round(delta * 2);
+  if (halves < 0) halves = 0;
+
+  const next = halves / 2;
+  el.textContent = Number.isInteger(next) ? String(next) : next.toFixed(1);
+}
         // Help button functionality
         function useHelp(helpId){const lifeline=document.getElementById(helpId);if(lifeline&&!lifeline.classList.contains('used')){lifeline.classList.add('used');}}
 
@@ -791,3 +804,4 @@
     </script>
 </body>
 </html>
+
